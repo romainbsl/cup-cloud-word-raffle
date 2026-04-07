@@ -25,14 +25,18 @@ import net.kodein.theme.compose.KodeinVectorImages
 import net.kodein.theme.compose.img.KodeinMonogram
 import net.kodein.theme.cup.KodeinCupMaterialTheme
 import net.kodein.theme.cup.KodeinPresentationBackground
+import net.kodein.theme.cup.slides.kodeinActivities
 import raffle.raffle
 import raffle.raffleState
 import slides.wordCloudRaffle
 import slides.introSlide
+import slides.outroSlide
 
 private val slides = Slides(
     introSlide,
+    kodeinActivities,
     wordCloudRaffle,
+    outroSlide,
 )
 
 fun main() = cupApplication(title = "KotlinConf Conference Pass Giveaway") {

@@ -7,14 +7,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import net.kodein.cup.CupKeyEvent
-import net.kodein.cup.PluginCupAPI
+import net.kodein.cup.LocalPresentationState
 import net.kodein.cup.PresentationState
 import net.kodein.cup.config.CupAdditionalOverlay
 import net.kodein.cup.config.CupConfigurationBuilder
-import net.kodein.cup.config.CupConfigurationDsl
 import net.kodein.cup.config.CupPlugin
+import net.kodein.cup.currentSlide
 import net.kodein.cup.key
 import net.kodein.cup.type
+import slides.wordCloudRaffle
 import kotlin.random.Random
 
 /**
@@ -33,7 +34,10 @@ internal class RafflePlugin(
     private val participants: List<String>,
 ) : CupPlugin {
 
+    var isCurrentSlideRaffle: Boolean = false
+
     override fun onKeyEvent(event: CupKeyEvent): Boolean {
+        if (!isCurrentSlideRaffle) return false
         if (event.type != KeyEventType.KeyDown) return false
         if (event.key != Key.R) return false
 
@@ -53,7 +57,10 @@ internal class RafflePlugin(
     }
 
     @Composable
-    override fun BoxScope.Content() {}
+    override fun BoxScope.Content() {
+        val presentationState = LocalPresentationState.current
+        isCurrentSlideRaffle = presentationState.currentSlide == wordCloudRaffle
+    }
 
     override fun overlay(state: PresentationState): List<CupAdditionalOverlay> = emptyList()
 }
@@ -67,7 +74,6 @@ internal class RafflePlugin(
  * })
  * ```
  */
-@CupConfigurationDsl
 fun CupConfigurationBuilder.raffle(state: RaffleState, participants: List<String>) {
     plugin(RafflePlugin(state, participants))
 }
